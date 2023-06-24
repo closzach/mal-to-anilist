@@ -18,10 +18,10 @@ def get_mal_animelist(username, user_list_url=None):
     if r.status_code != requests.codes.ok:
         print(r.raise_for_status())
     data = r.json()["data"]
-    print(data)
     if "next" in r.json()["paging"].keys():
-        data + get_mal_animelist(username, r.json()["paging"]["next"])
+        data += get_mal_animelist(username, r.json()["paging"]["next"])
     return data
 
+# Afficher la listes des noms des animés de l'utilisateur Heicleurc
 for anime in get_mal_animelist("Heicleurc"):
     print(anime["node"]["title"])
