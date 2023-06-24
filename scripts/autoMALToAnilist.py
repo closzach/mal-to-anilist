@@ -22,6 +22,22 @@ def get_mal_animelist(username, user_list_url=None):
         data += get_mal_animelist(username, r.json()["paging"]["next"])
     return data
 
-# Afficher la listes des noms des animés de l'utilisateur Heicleurc
-for anime in get_mal_animelist("Heicleurc"):
-    print(anime["node"]["title"])
+def get_mal_mangalist(username, user_list_url=None):
+    if user_list_url is None:
+        user_list_url = _MAL_API_URL_ + "/users/" + username + "/mangalist"
+    r = requests.get(user_list_url, headers=headers)
+    if r.status_code != requests.codes.ok:
+        print(r.raise_for_status())
+    data = r.json()["data"]
+    if "next" in r.json()["paging"].keys():
+        data += get_mal_mangalist(username, r.json()["paging"]["next"])
+    return data
+
+if __name__ == "__main__":
+    # Afficher la liste des noms des animés de l'utilisateur Heicleurc
+    for anime in get_mal_animelist("Heicleurc"):
+        print(anime["node"]["title"])
+
+    # Afficher la liste des noms des mangas de l'utilisateur Heicleurc
+    for manga in get_mal_mangalist("Heicleurc"):
+        print(manga["node"]["title"])
